@@ -14,7 +14,10 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   menu.init({
-    id_menu: DataTypes.INTEGER,
+    id_menu: {
+      type: DataTypes.INTEGER,
+      primaryKey: true
+    },
     nama_menu: DataTypes.STRING,
     jenis: DataTypes.STRING,
     deskripsi: DataTypes.TEXT,

@@ -11,10 +11,23 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      this.belongsTo(models.transaksi, {
+        foreignKey: "id_transaksi",
+        as: "transaksi"
+      })
+
+      this.belongsTo(models.menu, {
+        foreignKey: "id_menu",
+        as: "menu"
+      })
     }
   }
   detail_transaksi.init({
-    id_detail_transaksi: DataTypes.INTEGER,
+    id_detail_transaksi:{
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true
+    },
     id_transaksi: DataTypes.INTEGER,
     id_menu: DataTypes.INTEGER,
     harga: DataTypes.INTEGER

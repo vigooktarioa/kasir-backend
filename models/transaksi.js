@@ -11,10 +11,22 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      this.belongsTo(models.user, {
+        foreignKey: "id_user",
+        as: "user"
+      })
+
+      this.belongsTo(models.meja, {
+        foreignKey: "id_meja",
+        as: "meja"
+      })
     }
   }
   transaksi.init({
-    id_transaksi: DataTypes.INTEGER,
+    id_transaksi: {
+      type: DataTypes.INTEGER,
+      primaryKey: true
+    },
     tgl_transaksi: DataTypes.DATE,
     id_user: DataTypes.INTEGER,
     id_meja: DataTypes.INTEGER,
