@@ -9,7 +9,7 @@ const cors = require(`cors`)
 /** open CORS policy */
 app.use(cors())
 /** define all routes */
-const memberRoute = require(`./routes/user.route`)
+const userRoute = require(`./routes/user.route`)
 /** define prefix for each route */
 app.use(`/user`, userRoute)
 /** run server based on defined port */

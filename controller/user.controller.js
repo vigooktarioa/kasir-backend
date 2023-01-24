@@ -1,5 +1,5 @@
 // load model for user table
-const userModel = require('../models/index').member
+const userModel = require('../models/index').user
 
 // load operation from Sequelize
 const Op = require('sequelize').Op
@@ -22,7 +22,7 @@ exports.findUser = async (request, response) => {
 
     // call findAll() within where clause and
     // operation to find data based on keyword
-    let members = await userModel.findAll({
+    let users = await userModel.findAll({
         where: {
             [Op.or]: [
                 { nama_user: { [Op.substring]: keyword }},
