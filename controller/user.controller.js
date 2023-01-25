@@ -4,14 +4,15 @@ const userModel = require('../models/index').user
 // load operation from Sequelize
 const Op = require('sequelize').Op
 
+
 // create function for read all data
 exports.getAllUser = async (request, response) => {
     // call findAll() to get all data
-    let members = await userModel.findAll()
+    let user = await userModel.findAll()
     return response.json({
         success: true,
-        data: users,
-        message: 'All users have been loaded'
+        data: user,
+        message: 'All user have been loaded'
     })
 }
 
@@ -22,7 +23,7 @@ exports.findUser = async (request, response) => {
 
     // call findAll() within where clause and
     // operation to find data based on keyword
-    let users = await userModel.findAll({
+    let user = await userModel.findAll({
         where: {
             [Op.or]: [
                 { nama_user: { [Op.substring]: keyword }},
@@ -32,7 +33,7 @@ exports.findUser = async (request, response) => {
     })
     return response.json({
         success: true,
-        data: users,
+        data: user,
         message: 'All members have been loaded'
     })
 }
@@ -103,7 +104,7 @@ exports.deleteUser = (request, response) => {
     let idUser = request.params.id_user
 
     // execute delete data based on defined id user
-    userModel.destroy({ where: { id: idUser }})
+    userModel.destroy({ where: { id_user: idUser }})
     .then(result => {
         return response.json({
             success: true,
