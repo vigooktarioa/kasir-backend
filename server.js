@@ -10,10 +10,12 @@ const cors = require(`cors`)
 app.use(cors())
 /** define all routes */
 const userRoute = require(`./routes/user.route`)
+const mejaRoute = require('./routes/meja.route')
 /** define prefix for each route */
 app.use(`/user`, userRoute)
+app.use(`/meja`, mejaRoute)
 /** run server based on defined port */
 app.listen(PORT, () => {
-    console.log(`Server of School's Library runs on port
+    console.log(`Server kasir app running on port
     ${PORT}`) 
     })

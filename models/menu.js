@@ -26,6 +26,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'menu',
+    freezeTableName: true
   });
   return menu;
 };
