@@ -90,14 +90,22 @@ exports.updateBook = async(request,response) => {
             nama_menu: request.body.nama_menu,
             jenis: request.body.jenis,
             deskripsi: request.body.deskripsi,
-            gambar: request.filename.filename,
             harga: request.body.harga
         }
 
         if (request.file){
             const selectedMenu = await menuModal.findOne({
-                where: { id_menu: id_menu}
+                where: { id_menu: id_menu }
             })
+
+            const oldCoverMenu = selectedMenu.
+            
+            const pathCover = path.join(__dirname, '../cover', oldCoverMenu)
+
+            if(fs.existsSync(pathCover)){
+                fs.unlink(pathCover, error => console.log(error))
+            }
+            
         }
     })
 }
