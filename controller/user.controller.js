@@ -78,7 +78,7 @@ exports.updateUser = (request, response) => {
     }
 
     // define id user that will be update
-    let idUser = request.params.id_user
+    let idUser = request.params.id
 
     // execute update data based on defined id member
     userModel.update(dataUser, {where: {id: idUser} })

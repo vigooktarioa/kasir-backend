@@ -12,8 +12,8 @@ const userController = require('../controller/user.controller')
 app.get("/", userController.getAllUser)
 app.post("/", userController.addUser)
 app.post("/find", userController.findUser)
-app.put("/:id", userController.updateUser)
-app.delete("/:id", userController.deleteUser)
+app.put("/:id_user", userController.updateUser)
+app.delete("/:id_user", userController.deleteUser)
 
 // export app in order to load in another file
 module.exports = app
