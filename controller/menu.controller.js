@@ -7,7 +7,7 @@ const upload = require(`./upload-cover`).single(`cover`)
 // create function to get all menu
 exports.getAllMenu = async(request,response) => {
     // call findAll() to get all data
-    let books = await menuModel.findAll()
+    let menu = await menuModel.findAll()
     return response.json({
         success: true,
         data: menu,
@@ -98,14 +98,55 @@ exports.updateBook = async(request,response) => {
                 where: { id_menu: id_menu }
             })
 
-            const oldCoverMenu = selectedMenu.
+            const oldCoverMenu = selectedMenu.cover
             
             const pathCover = path.join(__dirname, '../cover', oldCoverMenu)
 
             if(fs.existsSync(pathCover)){
                 fs.unlink(pathCover, error => console.log(error))
             }
-            
+            menu.cover = request.file.filename
         }
+
+        menuModel.update(menu, { where: { id_menu: id_menu} })
+        .then(result => {
+            return response.json({
+                success: true,
+                message: 'Data menu has been update'
+            })
+        })
+        .catch(error => {
+            return response.json({
+            })
+        })
     })
 }
+
+exports.deleteMenu = async (request, response) => {
+    const id_menu = request.params.id_menu
+
+    const menu = await menuModel.findOne({ where: { id_menu: id_menu } })
+    const oldCoverMenu = menu.cover
+    const pathCover = path.join(__dirname, `../cover`,
+    oldCoverMenu)
+    if (fs.existsSync(pathCover)) {
+        fs.unlink(pathCover, error => console.log(error))
+    }
+
+    menuModel.destroy({ where: { id: id } })
+    .then(result => {
+        return response.json({
+            success: true,
+            data:menu,
+            message: `Data menu has been deleted`
+        })
+    })
+    .catch(error => {
+    /** if update's process fail */
+        return response.json({
+            success: false,
+            message: error.message
+            })
+        })
+    }
+

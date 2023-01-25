@@ -11,9 +11,13 @@ app.use(cors())
 /** define all routes */
 const userRoute = require(`./routes/user.route`)
 const mejaRoute = require('./routes/meja.route')
+const menuRoute = require('./routes/menu.route')
 /** define prefix for each route */
 app.use(`/user`, userRoute)
 app.use(`/meja`, mejaRoute)
+app.use(`/menu`, menuRoute)
+/** route to access uploaded file */
+app.use(express.static(__dirname))
 /** run server based on defined port */
 app.listen(PORT, () => {
     console.log(`Server kasir app running on port
