@@ -95,7 +95,9 @@ exports.updateBook = async(request,response) => {
         }
 
         if (request.file){
-            const selectedMenu = await 
+            const selectedMenu = await menuModal.findOne({
+                where: { id_menu: id_menu}
+            })
         }
     })
 }
