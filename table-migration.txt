@@ -14,3 +14,4 @@ sequelize model:create --name menu --attributes id_menu:integer,nama_menu:string
 sequelize model:create --name transaksi --attributes id_transaksi:integer,tgl_transaksi:date,id_user:integer,id_meja:integer,nama_pelanggan:string,status:string
 
 
+ 
