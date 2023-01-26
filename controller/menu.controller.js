@@ -37,47 +37,41 @@ exports.findMenu = async(request,response) => {
 }
 
 exports.addMenu = (request, response) => {
-    // run function upload
-    upload(request, response, async error => {
-        // check if there are error when upload
-        if (error) {
-            return response.json({ message: error})
-        }
-        if (!request.file){
-            return response.json({ message : 'nothing to upload'})
-        }
 
-        // prepare data from request
-        let newMenu = {
-            nama_menu: request.body.nama_menu,
-            jenis: request.body.jenis,
-            deskripsi: request.body.deskripsi,
-            gambar: request.filename.filename,
-            harga: request.body.harga
-        }
+    if (!request.file){
+        return response.json({ message : 'nothing to upload'})
+    }
 
-        menuModel.create(newMenu)
-        .then(result => {
-            // if insert's process success
-            return response.json({
-                success: true,
-                data: result,
-                message: 'New menu has been inserted'
-            })
+    // prepare data from request
+    let newMenu = {
+        nama_menu: request.body.nama_menu,
+        jenis: request.body.jenis,
+        deskripsi: request.body.deskripsi,
+        gambar: request.file.filename,
+        harga: request.body.harga
+    }
+
+    menuModel.create(newMenu)
+    .then(result => {
+        // if insert's process success
+        return response.json({
+            success: true,
+            data: result,
+            message: 'New menu has been inserted'
         })
+    })
 
-        .catch(error => {
-            // if insert's process failed
-            return response.json({
-                success: false,
-                message: error.message
-            })
+    .catch(error => {
+        // if insert's process failed
+        return response.json({
+            success: false,
+            message: error.message
         })
     })
 }
 
-// create function to update book
-exports.updateBook = async(request,response) => {
+// create function to update menu
+exports.updateMenu = async(request,response) => {
     // run upload function
     upload(request,response,async error => {
         if (error){
