@@ -1,5 +1,8 @@
 // load model for user table
 const userModel = require('../models/index').user
+const argon2 = require('argon2');
+const { Model } = require('sequelize');
+const user = require('../models/user');
 
 // load operation from Sequelize
 const Op = require('sequelize').Op
@@ -59,44 +62,43 @@ exports.searchUser = async (request, response) => {
 }
 
 // create function for add new user
-exports.addUser = (request, response) => {
+exports.addUser = async(request, response) => {
     // prepare data from request
-    let newUser = {
-        nama_user: request.body.nama_user,
-        role: request.body.role,
-        username: request.body.username,
-        email: request.body.email,
-        password: request.body.password
+    const {nama_user, role, username, email, password, confPassword} = request.body;
+    if(password !== confPassword) return response.status(400).json({
+        msg: "Password dan Confirm Password tidak cocok"
+    });
+    const hashPassword = await argon2.hash(password);
+    try {
+        const user = await userModel.create({
+            nama_user: nama_user,
+            role: role,
+            username: username,
+            email:email,
+            password: hashPassword
+        });
+        response.status(201).json({
+            succes: true,
+            data: user,
+            message: "Register Berhasil"
+        });
+    } catch (error) {
+        response.status(400).json({
+            message: error.message
+        });
     }
-
-    // execute inserting data to user's table
-    userModel.create(newUser)
-        .then(result => {
-            // if inser's process success
-            return response.json({
-                success: true,
-                data: result,
-                message: 'New user has been inserted'
-            })
-        })
-        .catch(error => {
-            // if insert's process fail
-            return response.json({
-                success: false,
-                message: error.message
-            })
-        })
 }
 
-// create function for update member
-exports.updateUser = (request, response) => {
+
+exports.updateUser = async (request, response) => {
     // prepare data that has been changed
+    const hashPassword = await argon2.hash(request.body.password);
     let dataUser = {
         nama_user: request.body.nama_user,
         role: request.body.role,
         username: request.body.username,
         email: request.body.email,
-        password: request.body.password
+        password: hashPassword
     }
 
     // define id user that will be update
@@ -120,6 +122,8 @@ exports.updateUser = (request, response) => {
         })
     })
 }
+
+
 
 // create function to delete data
 exports.deleteUser = (request, response) => {

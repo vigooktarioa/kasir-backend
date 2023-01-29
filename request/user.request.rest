@@ -15,7 +15,8 @@ Content-Type: application/json
     "role": "admin",
     "username": "syela",
     "email": "saturniesm@gmail.com",
-    "password": "12345"
+    "password": "12345",
+    "confPassword": "12345"
 }
 
 
@@ -34,10 +35,10 @@ Content-Type: application/json
 
 {
     "nama_user": "saturniesm",
-    "role": "kasir",
+    "role": "admin",
     "username": "syela",
     "email": "saturniesm@gmail.com",
-    "password": "12345"
+    "password": "23423432"
 }
 
 
