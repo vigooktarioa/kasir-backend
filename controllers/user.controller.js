@@ -1,19 +1,17 @@
 // load model for user table
-const userModel = require('../models/index').users
+const userModel = require('../models/index').user
 
 // load operation from Sequelize
 const Op = require('sequelize').Op
 
-// TODO export sekali aja
-// create function for read all data
 exports.getAllUser = async (request, response) => {
     // call findAll() to get all data
     try {
-        let users = await userModel.findAll();
+        let user = await userModel.findAll();
         response.json({
             success: true,
-            data: users,
-            message: 'All users have been loaded'
+            data: user,
+            message: 'All user have been loaded'
         })
     } catch (err) {
         console.log(err);
@@ -22,14 +20,14 @@ exports.getAllUser = async (request, response) => {
 
 exports.getOneUser = async (request, response) => {
     try {
-        let users = await userModel.findAll({
+        let user = await userModel.findAll({
             where: {
                 id_user: request.params.id_user
             }
         });
         response.json({
             success: true,
-            data: users,
+            data: user,
             message: 'One user has been loaded'
         })
     } catch (err) {
@@ -44,17 +42,18 @@ exports.searchUser = async (request, response) => {
 
     // call findAll() within where clause and
     // operation to find data based on keyword
-    let users = await userModel.findAll({
+    let user = await userModel.findAll({
         where: {
             [Op.or]: [
                 { username: { [Op.substring]: keyword }},
+                { email: { [Op.substring]: keyword }},
                 { role: { [Op.substring]: keyword } }
             ]
         }
     })
     return response.json({
         success: true,
-        data: users,
+        data: user,
         message: 'Searching success'
     })
 }
@@ -66,6 +65,7 @@ exports.addUser = (request, response) => {
         nama_user: request.body.nama_user,
         role: request.body.role,
         username: request.body.username,
+        email: request.body.email,
         password: request.body.password
     }
 
@@ -95,6 +95,7 @@ exports.updateUser = (request, response) => {
         nama_user: request.body.nama_user,
         role: request.body.role,
         username: request.body.username,
+        email: request.body.email,
         password: request.body.password
     }
 

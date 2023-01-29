@@ -15,6 +15,25 @@ exports.getAllMenu = async(request,response) => {
     })
 }
 
+exports.getOneMenu = async (request, response) => {
+    try {
+        let menu = await menuModel.findAll({
+            where: {
+                id_menu: request.params.id_menu
+            }
+        });
+        response.json({
+            success: true,
+            data: menu,
+            message: 'One menu has been loaded'
+        })
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+
+
 // create function for filter using keyword
 exports.findMenu = async(request,response) => {
     // define keyword to find data

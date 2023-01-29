@@ -8,9 +8,10 @@ const app = express()
 app.use(express.json())
 
 // load meja's controller
-const mejaController = require('../controller/meja.controller')
+const mejaController = require('../controllers/meja.controller')
 app.get("/", mejaController.getAllMeja)
-app.post("/", mejaController.addMeja)
+app.get("/:id_meja", mejaController.getOneMeja)
+app.post("/add", mejaController.addMeja)
 app.post("/find", mejaController.findMeja)
 app.put("/:id_meja", mejaController.updateMeja)
 app.delete("/:id_meja", mejaController.deleteMeja)

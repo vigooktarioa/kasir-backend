@@ -18,10 +18,46 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       primaryKey: true
     },
-    nama_user: DataTypes.STRING,
+    uuid:{
+      type: DataTypes.STRING,
+      defaultValue: DataTypes.UUIDV4,
+      allowNull: false,
+      validate:{
+          notEmpty: true
+      }
+    },
+    nama_user:{
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate:{
+          notEmpty: true,
+          len: [3, 100]
+      }
+    },
     role: DataTypes.ENUM('admin','kasir','manager'),
-    username: DataTypes.STRING,
-    password: DataTypes.STRING
+    username:{
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate:{
+          notEmpty: true,
+          len: [3, 100]
+      }
+    },
+    email:{
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate:{
+          notEmpty: true,
+          isEmail: true
+      }
+    },
+    password:{
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate:{
+          notEmpty: true
+      }
+    },
   }, {
     sequelize,
     modelName: 'user',
