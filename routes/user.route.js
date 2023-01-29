@@ -8,10 +8,11 @@ const app = express()
 app.use(express.json())
 
 // load user's controller
-const userController = require('../controller/user.controller')
+const userController = require('../controllers/user.controller')
 app.get("/", userController.getAllUser)
-app.post("/", userController.addUser)
-app.post("/find", userController.findUser)
+app.get("/:id_user", userController.getOneUser)
+app.post("/add", userController.addUser)
+app.post("/find", userController.searchUser)
 app.put("/:id_user", userController.updateUser)
 app.delete("/:id_user", userController.deleteUser)
 

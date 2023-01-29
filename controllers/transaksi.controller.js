@@ -14,5 +14,4 @@ exports.addTransaksi = async (request, response) => {
     }
 
     transaksiModel.create(newData)
-    .then(result =>)
 }

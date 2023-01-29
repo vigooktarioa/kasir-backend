@@ -16,6 +16,23 @@ exports.getAllMeja = async (request,response) => {
     })
 }
 
+exports.getOneMeja = async (request, response) => {
+    try {
+        let meja = await mejaModel.findAll({
+            where: {
+                id_meja: request.params.id_meja
+            }
+        });
+        response.json({
+            success: true,
+            data: meja,
+            message: 'One meja has been loaded'
+        })
+    } catch (err) {
+        console.log(err);
+    }
+}
+
 // create function for filter
 exports.findMeja = async (request, response) => {
     // define keyword to find data
