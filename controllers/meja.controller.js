@@ -111,6 +111,7 @@ exports.updateMeja = (request, response) => {
     })
 }
 
+
 // create function to delete data
 exports.deleteMeja = (request, response) => {
     // define id meja that will be update
