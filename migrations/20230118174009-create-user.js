@@ -51,6 +51,9 @@ module.exports = {
             notEmpty: true
         }
       },
+      refresh_token:{
+        type: Sequelize.TEXT
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

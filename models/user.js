@@ -58,6 +58,7 @@ module.exports = (sequelize, DataTypes) => {
           notEmpty: true
       }
     },
+    refresh_token:DataTypes.TEXT
   }, {
     sequelize,
     modelName: 'user',

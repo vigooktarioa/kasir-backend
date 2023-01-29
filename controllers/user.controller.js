@@ -1,8 +1,6 @@
 // load model for user table
 const userModel = require('../models/index').user
 const argon2 = require('argon2');
-const { Model } = require('sequelize');
-const user = require('../models/user');
 
 // load operation from Sequelize
 const Op = require('sequelize').Op
@@ -10,6 +8,7 @@ const Op = require('sequelize').Op
 exports.getAllUser = async (request, response) => {
     // call findAll() to get all data
     try {
+// TODO coba pake atrribute biar ga keliattan pw
         let user = await userModel.findAll();
         response.json({
             success: true,
