@@ -9,14 +9,14 @@ app.use(express.json())
 
 // load user's controller
 const userController = require('../controllers/user.controller')
-const verify = require("../middleware/auth")
+const verify = require("../middleware/verify")
 
-app.get("/",verify.verifyToken, userController.getAllUser)
-app.get("/:id_user",verify.verifyToken, userController.getOneUser)
-app.post("/add",verify.verifyToken, userController.addUser)
-app.post("/find",verify.verifyToken, userController.searchUser)
-app.put("/:id_user",verify.verifyToken, userController.updateUser)
-app.delete("/:id_user",verify.verifyToken, userController.deleteUser)
+app.get("/",verify.verifyJwt, userController.getAllUser)
+app.get("/:id_user",verify.verifyJwt, userController.getOneUser)
+app.post("/add",verify.verifyJwt, userController.addUser)
+app.post("/find",verify.verifyJwt, userController.searchUser)
+app.put("/:id_user",verify.verifyJwt, userController.updateUser)
+app.delete("/:id_user",verify.verifyJwt, userController.deleteUser)
 
 // export app in order to load in another file
 module.exports = app
