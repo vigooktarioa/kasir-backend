@@ -13,12 +13,13 @@ const userRoute = require(`./routes/user.route`)
 const mejaRoute = require('./routes/meja.route')
 const menuRoute = require('./routes/menu.route')
 const authRoute = require('./routes/auth.route')
-const cookieParser = require('cookie-parser')
+const transaksiRoute = require('./routes/transaksi.route')
 
 app.use(`/auth`, authRoute)
 app.use(`/user`, userRoute)
 app.use(`/meja`, mejaRoute)
 app.use(`/menu`, menuRoute)
+app.use('/transaksi', transaksiRoute)
 
 app.use(express.static(__dirname))
 

@@ -22,7 +22,7 @@ exports.login = async(request, response) => {
             username, 
             email
         }, process.env.ACCESS_TOKEN_SECRET,{
-            expiresIn: '20s'
+            expiresIn: '24h'
         });
         const refreshToken = jwt.sign({
             id_user, 

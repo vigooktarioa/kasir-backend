@@ -32,8 +32,6 @@ exports.getOneMenu = async (request, response) => {
     }
 }
 
-
-
 // create function for filter using keyword
 exports.findMenu = async(request,response) => {
     // define keyword to find data
