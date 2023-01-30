@@ -3,6 +3,8 @@ const argon2 = require('argon2');
 const jwt = require('jsonwebtoken');
 
 exports.login = async(req, res) => {
+
+    // validation 
     const {email, password} = req.body
     if(!email || !password) return res.status(400).json({
         'message': 'Email and Passsword are required'
@@ -18,13 +20,13 @@ exports.login = async(req, res) => {
             const id_user = user.id_user;
             const username = user.username;
             const email = user.email;  
-
             const accessToken = jwt.sign({
                 id_user, 
                 username, 
                 email
             }, process.env.ACCESS_TOKEN_SECRET,{
-                expiresIn: process.env.JWT_EXPIRATION
+                // by default lek ga dikasi date now dia bakal set waktu after epoch
+                expiresIn: Date.now() + process.env.JWT_EXPIRATION
             });
 
             const refreshToken = jwt.sign({
@@ -32,7 +34,7 @@ exports.login = async(req, res) => {
                 username, 
                 email
             }, process.env.REFRESH_TOKEN_SECRET,{
-                expiresIn: process.env.JWT_REFRESH_EXPIRATION
+                expiresIn: Date.now() + process.env.JWT_REFRESH_EXPIRATION
             });
 
             await userModel.update({refresh_token: refreshToken},{
