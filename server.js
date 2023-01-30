@@ -13,7 +13,6 @@ const userRoute = require(`./routes/user.route`)
 const mejaRoute = require('./routes/meja.route')
 const menuRoute = require('./routes/menu.route')
 const authRoute = require('./routes/auth.route')
-const cookieParser = require('cookie-parser')
 
 app.use(`/auth`, authRoute)
 app.use(`/user`, userRoute)
