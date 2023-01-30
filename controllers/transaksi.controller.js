@@ -17,11 +17,13 @@ exports.addTransaksi = async (request, response) => {
         let transaksiID = result.id
         let detailTransaksi = request.body.detail_transaksi
 
-        for (let i = 0; i < detailTransaksi.length; i++){
-            detailTransaksi[i].transaksiID = transaksiID
-        }
+        if (Array.isArray(request.body.detail_transaksi)) {
+            for (let i = 0; i < request.body.detail_transaksi.length; i++) {
+            }
+          }
+          
 
-        detailTransaksi.bulkCreate(detailTransaksi)
+        detailTransaksiModel.bulkCreate(detailTransaksi)
         .then(result => {
             return response.json({
                 success: true,
@@ -54,7 +56,7 @@ exports.updateTransaksi = async(request, response) => {
 
     let transaksiID = request.params.id_transaksi
 
-    transaksiModel.update(newData, { where: { id: transaksID} })
+    transaksiModel.update(newData, { where: { id: transaksiID} })
     .then(async result => {
         await detailTransaksi.destroy(
             { where: { transaksiID: transaksiID}}
@@ -62,9 +64,10 @@ exports.updateTransaksi = async(request, response) => {
 
         let detailTransaksi = request.body.detail_transaksi
 
-        for (let i = 0; i < detailTransaksi.length; i++){
-            detailTransaksi[i].transaksiID = transaksiID
-        }
+        if (Array.isArray(request.body.detail_transaksi)) {
+            for (let i = 0; i < request.body.detail_transaksi.length; i++) {
+            }
+          }
 
         detailTransaksiModel.bulkCreate(detailTransaksi)
         .then(result => {
