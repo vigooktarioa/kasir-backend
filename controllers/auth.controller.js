@@ -17,29 +17,31 @@ exports.login = async(req, res) => {
         });
         const match = await argon2.verify(user.password, req.body.password);
         if(match) {
-            const id_user = user.id_user;
             const username = user.username;
-            const email = user.email;  
+            const email = user.email;
+            const role = user.role  
             const accessToken = jwt.sign({
-                id_user, 
-                username, 
-                email
+                "userInfo" :{
+                    "username": username,
+                    "email": email,
+                    "role": role
+                }
             }, process.env.ACCESS_TOKEN_SECRET,{
                 // by default lek ga dikasi date now dia bakal set waktu after epoch
                 expiresIn: Date.now() + process.env.JWT_EXPIRATION
             });
 
             const refreshToken = jwt.sign({
-                id_user,
                 username, 
-                email
+                email,
+                role
             }, process.env.REFRESH_TOKEN_SECRET,{
                 expiresIn: Date.now() + process.env.JWT_REFRESH_EXPIRATION
             });
 
             await userModel.update({refresh_token: refreshToken},{
                 where:{
-                    id_user: id_user
+                    id_user: user.id_user
                 }
             });
 
@@ -70,39 +72,17 @@ exports.logout = async (request, response) => {
             refresh_token: refreshToken
         }
     })
-    if(user) return response.sendStatus(204);
-
+    if(!user) return response.sendStatus(204);
+    const id_user = user.id_user
     await userModel.update({refresh_token: null},{
         where:{
             id_user: id_user
         }
     });
     response.clearCookie('refreshToken');
-    return response.sendStatus(200);
+    return response.status(200).json({
+        'message': 'Logout'
+    })
 }
 
-exports.refreshToken = async(request, response) => {
-    try {
-        const refreshToken = request.cookies.refreshToken
-        if(!refreshToken) return response.sendStatus(401);
-        const user = await userModel.findAll({
-            where:{
-                refresh_token: refreshToken
-            }
-        });
-        if(!user) return response.sendStatus(403);
-        jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (error, decoded) => {
-            if(error) return response.sendStatus(403);
-            const id_user = user.user_id;
-            const username = user.username;
-            const email = user.email;
-            const accessToken = jwt.sign({id_user, username, email}, process.env.ACCESS_TOKEN_SECRET,{
-                expiresIn: process.env.JWT_EXPIRATION
-            });
-            res.json({ accessToken });
-        });
-    } catch (error) {
-        console.log(error);
-    }
-}
 
