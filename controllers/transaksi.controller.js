@@ -31,7 +31,7 @@ exports.addTransaksi = async (request, response) => {
             })
         })
         .catch(error => {
-            return response.json({
+            return response.json({    
                 success: false,
                 message: error.message
             })
