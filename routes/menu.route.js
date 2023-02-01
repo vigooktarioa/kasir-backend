@@ -6,7 +6,6 @@ app.use(express.json())
 const menuController = require('../controllers/menu.controller')
 const upload = require(`../controllers/upload-cover`).single(`cover`)
 
-
 app.get("/", menuController.getAllMenu)
 app.get("/:id_menu", menuController.getOneMenu)
 app.post("/add", [upload], menuController.addMenu)
