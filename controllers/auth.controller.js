@@ -2,49 +2,64 @@ const userModel = require('../models/index').user
 const argon2 = require('argon2');
 const jwt = require('jsonwebtoken');
 
-exports.login = async(request, response) => {
-    try {
+exports.login = async(req, res) => {
+
+    // validation 
+    const {email, password} = req.body
+    if(!email || !password) return res.status(400).json({
+        'message': 'Email and Passsword are required'
+    })
+    try{
         const user = await userModel.findOne({
             where:{
-                email: request.body.email
+                email: req.body.email
             }
         });
-        const match = await argon2.verify(user.password, request.body.password);        
-        if(!match) return response.status(400).json({
-            message: "Wrong Password"
-        });
+        const match = await argon2.verify(user.password, req.body.password);
+        if(match) {
+            const username = user.username;
+            const email = user.email;
+            const role = user.role  
+            const accessToken = jwt.sign({
+                "userInfo" :{
+                    "username": username,
+                    "email": email,
+                    "role": role
+                }
+            }, process.env.ACCESS_TOKEN_SECRET,{
+                // by default lek ga dikasi date now dia bakal set waktu after epoch
+                expiresIn: Date.now() + process.env.JWT_EXPIRATION
+            });
 
-        const id_user = user.id_user;
-        const username = user.username;
-        const email = user.email;
-        const accessToken = jwt.sign({
-            id_user, 
-            username, 
-            email
-        }, process.env.ACCESS_TOKEN_SECRET,{
-            expiresIn: '24h'
-        });
-        const refreshToken = jwt.sign({
-            id_user, 
-            username, 
-            email
-        }, process.env.REFRESH_TOKEN_SECRET,{
-            expiresIn: '1d'
-        });
-        await userModel.update({refresh_token: refreshToken},{
-            where:{
-                id_user: id_user
-            }
-        });
-        response.cookie('refreshToken', refreshToken,{
-            httpOnly: true,
-            maxAge: 24 * 60 * 60 * 1000
-        });
-        response.json({ accessToken });
-    } catch (error) {
-        response.status(404).json({
-            message:"Email tidak ditemukan"
-        });
+            const refreshToken = jwt.sign({
+                username, 
+                email,
+                role
+            }, process.env.REFRESH_TOKEN_SECRET,{
+                expiresIn: Date.now() + process.env.JWT_REFRESH_EXPIRATION
+            });
+
+            await userModel.update({refresh_token: refreshToken},{
+                where:{
+                    id_user: user.id_user
+                }
+            });
+
+            res.cookie('refreshToken', refreshToken,{
+                httpOnly: true,
+                maxAge: 24 * 60 * 60 * 1000
+            });
+            res.json({ accessToken });
+        }else{
+            res.status(401).json({
+                'message': 'Wrong password'
+            })
+        }     
+    }catch (error){
+        res.status(404).json({
+            'message': 'Email does not exist'
+        })
+        console.log(error)
     }
 }
 
@@ -57,38 +72,17 @@ exports.logout = async (request, response) => {
             refresh_token: refreshToken
         }
     })
-    if(user) return response.sendStatus(204);
-
+    if(!user) return response.sendStatus(204);
+    const id_user = user.id_user
     await userModel.update({refresh_token: null},{
         where:{
             id_user: id_user
         }
     });
     response.clearCookie('refreshToken');
-    return response.sendStatus(200);
+    return response.status(200).json({
+        'message': 'Logout'
+    })
 }
 
-exports.refreshToken = async(request, response) => {
-    try {
-        const refreshToken = request.cookies.refreshToken
-        if(!refreshToken) return response.sendStatus(401);
-        const user = await userModel.findAll({
-            where:{
-                refresh_token: refreshToken
-            }
-        });
-        if(!user) return response.sendStatus(403);
-        jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (error, decoded) => {
-            if(error) return response.sendStatus(403);
-            const id_user = user.user_id;
-            const username = user.username;
-            const email = user.email;
-            const accessToken = jwt.sign({id_user, username, email}, process.env.ACCESS_TOKEN_SECRET,{
-                expiresIn: '15s'
-            });
-            res.json({ accessToken });
-        });
-    } catch (error) {
-        console.log(error);
-    }
-}
+

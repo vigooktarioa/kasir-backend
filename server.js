@@ -15,6 +15,7 @@ const menuRoute = require('./routes/menu.route')
 const authRoute = require('./routes/auth.route')
 const transaksiRoute = require('./routes/transaksi.route')
 
+
 app.use(`/auth`, authRoute)
 app.use(`/user`, userRoute)
 app.use(`/meja`, mejaRoute)
