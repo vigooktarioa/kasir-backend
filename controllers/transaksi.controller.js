@@ -14,15 +14,13 @@ exports.addTransaksi = async (request, response) => {
 
     transaksiModel.create(newData)
     .then(result => {
-        let transaksiID = result.id
+        let transaksiID = result.id_transaksi
         let detailTransaksi = request.body.detail_transaksi
 
-        if (Array.isArray(request.body.detail_transaksi)) {
-            for (let i = 0; i < request.body.detail_transaksi.length; i++) {
-            }
-          }
+        for (let i = 0; i < request.body.detail_transaksi.length; i++) {
+        detailTransaksi[i].id_transaksi = transaksiID
+        }
           
-
         detailTransaksiModel.bulkCreate(detailTransaksi)
         .then(result => {
             return response.json({
@@ -66,6 +64,7 @@ exports.updateTransaksi = async(request, response) => {
 
         if (Array.isArray(request.body.detail_transaksi)) {
             for (let i = 0; i < request.body.detail_transaksi.length; i++) {
+            detailTransaksi[i].transaksiID = transaksiID
             }
           }
 

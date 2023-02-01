@@ -1,7 +1,5 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
+const { Model, Sequelize } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class detail_transaksi extends Model {
     /**
@@ -11,15 +9,8 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      this.belongsTo(models.transaksi, {
-        foreignKey: "id_transaksi",
-        as: "transaksi"
-      })
-
-      this.belongsTo(models.menu, {
-        foreignKey: "id_menu",
-        as: "menu"
-      })
+      this.belongsTo(models.transaksi)
+      this.belongsTo(models.menu)
     }
   }
   detail_transaksi.init({
@@ -28,8 +19,22 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
       autoIncrement: true
     },
-    id_transaksi: DataTypes.INTEGER,
-    id_menu: DataTypes.INTEGER,
+    id_transaksi:{ 
+      type: Sequelize.INTEGER,
+      allowNull: false,
+      references: {
+        model: "transaksi",
+        key: "id_transaksi"
+      }
+    },
+    id_menu: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
+      references: {
+        model: "menu",
+        key: "id_menu"
+      }
+    },
     harga: DataTypes.INTEGER
   }, {
     sequelize,

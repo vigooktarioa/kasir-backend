@@ -1,25 +1,16 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
+const { Model, Sequelize } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class transaksi extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
     static associate(models) {
       // define association here
-      this.belongsTo(models.user, {
-        foreignKey: "id_user",
-        as: "user"
-      })
-
-      this.belongsTo(models.meja, {
-        foreignKey: "id_meja",
-        as: "meja"
-      })
+      this.belongsTo(models.user)
+      this.belongsTo(models.meja)
+      this.hasMany(models.detail_transaksi, {
+        foreignKey: 'id_transaksi',
+        as : 'detail_transaksi'
+      }
+        )
     }
   }
   transaksi.init({
@@ -28,8 +19,22 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true
     },
     tgl_transaksi: DataTypes.DATE,
-    id_user: DataTypes.INTEGER,
-    id_meja: DataTypes.INTEGER,
+    id_user: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
+      references: {
+        model: "user",
+        key: "id_user"
+      }
+    },
+    id_meja: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
+      references: {
+        model: "meja",
+        key: "id_meja"
+      }
+    },
     nama_pelanggan: DataTypes.STRING,
     status: DataTypes.STRING
   }, {

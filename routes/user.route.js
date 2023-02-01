@@ -13,8 +13,8 @@ const verify = require("../middleware/auth")
 
 app.get("/",verify.verifyToken, userController.getAllUser)
 app.get("/:id_user",verify.verifyToken, userController.getOneUser)
-app.post("/add",verify.verifyToken, userController.addUser)
-app.post("/find",verify.verifyToken, userController.searchUser)
+app.post("/add", userController.addUser)
+app.post("/find", userController.searchUser)
 app.put("/:id_user",verify.verifyToken, userController.updateUser)
 app.delete("/:id_user",verify.verifyToken, userController.deleteUser)
 
