@@ -1,3 +1,4 @@
+const detail_transaksi = require('../models/detail_transaksi')
 
 const transaksiModel = require('../models/index').transaksi
 const detailTransaksiModel = require('../models/index').detail_transaksi
@@ -12,20 +13,31 @@ exports.addTransaksi = async (request, response) => {
         status: request.body.status
     }
 
+    // insert ke tabel transaksi
     transaksiModel.create(newData)
     .then(result => {
+        // mengambil id terakhir dari transaksi
         let transaksiID = result.id_transaksi
+        // menyimpan detail_transaksi dari request ini dalam bentuk array
         let detailTransaksi = request.body.detail_transaksi
 
-        for (let i = 0; i < request.body.detail_transaksi.length; i++) {
-        detailTransaksi[i].id_transaksi = transaksiID
+        // insert transaksiID ke tiap item di detail_transaksi
+        // (1 transaksi bisa memiliki beberapa detail_transaksi)
+        for (let i = 0; i < detailTransaksi.length; i++) {
+        detailTransaksi[i].transaksiID = transaksiID
         }
-          
+         
+        // insert semua detail_transaksi
+        // (termasuk id_transaksi yang diambil dari 
+        // result.id ke setiap detail_transaksi yang berkaitan)
+
+        // TODO gimana biar id_transaksi bisa masuk ke detail_transaksi
+        
         detailTransaksiModel.bulkCreate(detailTransaksi)
         .then(result => {
             return response.json({
                 success: true,
-                message: 'New transaction has been inserted'
+                message: 'New transaction and transaction details has been inserted'
             })
         })
         .catch(error => {

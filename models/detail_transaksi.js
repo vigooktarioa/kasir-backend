@@ -35,7 +35,10 @@ module.exports = (sequelize, DataTypes) => {
         key: "id_menu"
       }
     },
-    harga: DataTypes.INTEGER
+    harga: {
+      type: Sequelize.STRING,
+      allowNull: false
+    }
   }, {
     sequelize,
     modelName: 'detail_transaksi',
