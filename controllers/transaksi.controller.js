@@ -24,26 +24,30 @@ exports.addTransaksi = async (request, response) => {
         // insert transaksiID ke tiap item di detail_transaksi
         // (1 transaksi bisa memiliki beberapa detail_transaksi)
         for (let i = 0; i < detailTransaksi.length; i++) {
-        detailTransaksi[i].transaksiID = transaksiID
+            detailTransaksi[i].id_transaksi = transaksiID
         }
-         
+        console.log(detailTransaksi)
         // insert semua detail_transaksi
         // (termasuk id_transaksi yang diambil dari 
         // result.id ke setiap detail_transaksi yang berkaitan)
 
         // TODO gimana biar id_transaksi bisa masuk ke detail_transaksi
         
+
         detailTransaksiModel.bulkCreate(detailTransaksi)
         .then(result => {
             return response.json({
                 success: true,
                 message: 'New transaction and transaction details has been inserted'
+                
+                
             })
         })
         .catch(error => {
             return response.json({    
                 success: false,
                 message: error.message
+                
             })
         })
     })
@@ -52,7 +56,9 @@ exports.addTransaksi = async (request, response) => {
             success: false,
             message: error.message
         })
+        
     })
+    
 }
 
 exports.updateTransaksi = async(request, response) => {

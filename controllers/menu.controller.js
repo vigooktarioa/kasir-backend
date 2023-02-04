@@ -77,6 +77,7 @@ exports.addMenu = (request, response) => {
             message: 'New menu has been inserted'
         })
     })
+    
 
     .catch(error => {
         // if insert's process failed
