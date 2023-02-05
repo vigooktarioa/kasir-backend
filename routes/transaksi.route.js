@@ -1,12 +1,12 @@
-const express = require('express')
-const app = express()
+const express = require("express");
+const app = express();
 
-app.use(express.json())
+app.use(express.json());
 
-const transaksiController = require('../controllers/transaksi.controller')
+const transaksiController = require("../controllers/transaksi.controller");
 
-app.post("/", transaksiController.addTransaksi)
-app.put("/:id", transaksiController.updateTransaksi)
-app.delete("/:id", transaksiController.deleteTransaksi)
+app.post("/", transaksiController.addTransaksi);
+app.put("/:id", transaksiController.updateTransaksi);
+app.delete("/:id", transaksiController.deleteTransaksi);
 
-module.exports = app
+module.exports = app;

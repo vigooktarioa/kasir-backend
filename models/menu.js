@@ -1,7 +1,5 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class menu extends Model {
     /**
@@ -11,25 +9,28 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       this.hasMany(models.detail_transaksi, {
-        foreignKey: 'id_menu', 
-        as: 'detail_transaksi'
-      })
+        foreignKey: "id_menu",
+        as: "detail_transaksi",
+      });
     }
   }
-  menu.init({
-    id_menu: {
-      type: DataTypes.INTEGER,
-      primaryKey: true
+  menu.init(
+    {
+      id_menu: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+      },
+      nama_menu: DataTypes.STRING,
+      jenis: DataTypes.STRING,
+      deskripsi: DataTypes.TEXT,
+      gambar: DataTypes.STRING,
+      harga: DataTypes.INTEGER,
     },
-    nama_menu: DataTypes.STRING,
-    jenis: DataTypes.STRING,
-    deskripsi: DataTypes.TEXT,
-    gambar: DataTypes.STRING,
-    harga: DataTypes.INTEGER
-  }, {
-    sequelize,
-    modelName: 'menu',
-    freezeTableName: true
-  });
+    {
+      sequelize,
+      modelName: "menu",
+      freezeTableName: true,
+    }
+  );
   return menu;
 };
