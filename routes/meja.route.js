@@ -11,7 +11,7 @@ const verify = require("../middleware/auth");
 
 // load meja's controller
 const mejaController = require("../controllers/meja.controller");
-app.get("/", verify.verifyToken, mejaController.getAllMeja);
+app.get("/", mejaController.getAllMeja);
 app.get("/:id_meja", verify.verifyToken, mejaController.getOneMeja);
 app.post("/add", mejaController.addMeja);
 app.post("/find", mejaController.findMeja);

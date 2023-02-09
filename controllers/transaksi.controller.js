@@ -1,7 +1,8 @@
 const detail_transaksi = require("../models/detail_transaksi");
-
+const transaksi = require("../models/transaksi");
 const transaksiModel = require("../models/index").transaksi;
 const detailTransaksiModel = require("../models/index").detail_transaksi;
+const mejaModel = require("../models/index").meja;
 const Op = require("sequelize").Op;
 
 exports.addTransaksi = async (request, response) => {
@@ -67,20 +68,21 @@ exports.updateTransaksi = async (request, response) => {
     status: request.body.status,
   };
 
-  let transaksiID = request.params.id_transaksi;
+  let transaksiID = request.params.id;
 
   transaksiModel
-    .update(newData, { where: { id: transaksiID } })
+    .update(newData, { where: { id_transaksi: transaksiID } })
     .then(async (result) => {
-      await detailTransaksi.destroy({ where: { transaksiID: transaksiID } });
+      await detailTransaksiModel.destroy({
+        where: { id_transaksi: transaksiID },
+      });
 
       let detailTransaksi = request.body.detail_transaksi;
 
-      if (Array.isArray(request.body.detail_transaksi)) {
-        for (let i = 0; i < request.body.detail_transaksi.length; i++) {
-          detailTransaksi[i].transaksiID = transaksiID;
-        }
+      for (let i = 0; i < detailTransaksi.length; i++) {
+        detailTransaksi[i].id_transaksi = transaksiID;
       }
+      console.log(detailTransaksi);
 
       detailTransaksiModel
         .bulkCreate(detailTransaksi)
@@ -106,13 +108,13 @@ exports.updateTransaksi = async (request, response) => {
 };
 
 exports.deleteTransaksi = async (request, response) => {
-  let transaksiID = request.params.id_transaksi;
+  let transaksiID = request.params.id;
 
   detailTransaksiModel
-    .destroy({ where: { transaksiID: transaksiID } })
+    .destroy({ where: { id_transaksi: transaksiID } })
     .then((result) => {
       transaksiModel
-        .destroy({ where: { id: transaksiID } })
+        .destroy({ where: { id_transaksi: transaksiID } })
         .then((result) => {
           return response.json({
             success: true,
@@ -135,3 +137,56 @@ exports.deleteTransaksi = async (request, response) => {
 };
 
 //TODO kurang pembayaran transaksi dimana meja akan diubah dari status tersedia menjadi tidak tersedia atau sebaliknya
+// exports.updatePayment = async (request, response) => {
+//   let transaksiID = request.params.id;
+//   transaksiModel
+//     .update({ status: "lunas" }, { where: { id_transaksi: transaksiID } })
+//     .then(async (result) => {
+//       // Retrieve the value of mejaIID from the database
+//       const meja = await transaksiModel.findOne({
+//         where: { id_transaksi: transaksiID },
+//       });
+//       mejaModel
+//         .update(
+//           { status: "tersedia" },
+//           { where: { id_meja: transaksiModel.id_meja } }
+//         )
+//         .then((result) => {
+//           return response.json({
+//             success: true,
+//             data: [],
+//             message: "sukses",
+//           });
+//         });
+//     });
+// };
+
+exports.createPayment = async (request, response) => {
+  let transaksiID = request.params.id;
+
+  let mejaID = transaksi.id_meja;
+  mejaModel
+    .update({ status: "tersedia" }, { where: { id_meja: mejaID } })
+    .then(async (result) => {
+      transaksiModel
+        .update({ status: "lunas" }, { where: { id_transaksi: transaksiID } })
+        .then((result) => {
+          return response.json({
+            success: true,
+            message: "Payment success and table/transaction status updated",
+          });
+        })
+        .catch((error) => {
+          return response.json({
+            success: false,
+            message: error.message,
+          });
+        });
+    })
+    .catch((error) => {
+      return response.json({
+        success: false,
+        message: error.message,
+      });
+    });
+};

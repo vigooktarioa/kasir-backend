@@ -19,6 +19,7 @@ module.exports = (sequelize, DataTypes) => {
       id_menu: {
         type: DataTypes.INTEGER,
         primaryKey: true,
+        autoIncrement: true
       },
       nama_menu: DataTypes.STRING,
       jenis: DataTypes.STRING,

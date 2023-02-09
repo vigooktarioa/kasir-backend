@@ -13,12 +13,14 @@ const mejaRoute = require("./routes/meja.route");
 const menuRoute = require("./routes/menu.route");
 const authRoute = require("./routes/auth.route");
 const transaksiRoute = require("./routes/transaksi.route");
+const paymentRoute = require("./routes/payment.route");
 
 app.use(`/auth`, authRoute);
 app.use(`/user`, userRoute);
 app.use(`/meja`, mejaRoute);
 app.use(`/menu`, menuRoute);
 app.use("/transaksi", transaksiRoute);
+app.use("./payment", paymentRoute);
 
 app.use(express.static(__dirname));
 

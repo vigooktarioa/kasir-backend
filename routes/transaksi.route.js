@@ -6,7 +6,8 @@ app.use(express.json());
 const transaksiController = require("../controllers/transaksi.controller");
 
 app.post("/", transaksiController.addTransaksi);
-app.put("/:id", transaksiController.updateTransaksi);
+app.put("/edit/:id", transaksiController.updateTransaksi);
+app.put("/pay/:id", transaksiController.createPayment);
 app.delete("/:id", transaksiController.deleteTransaksi);
 
 module.exports = app;
