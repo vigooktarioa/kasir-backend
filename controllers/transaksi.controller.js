@@ -137,39 +137,18 @@ exports.deleteTransaksi = async (request, response) => {
 };
 
 //TODO kurang pembayaran transaksi dimana meja akan diubah dari status tersedia menjadi tidak tersedia atau sebaliknya
-// exports.updatePayment = async (request, response) => {
-//   let transaksiID = request.params.id;
-//   transaksiModel
-//     .update({ status: "lunas" }, { where: { id_transaksi: transaksiID } })
-//     .then(async (result) => {
-//       // Retrieve the value of mejaIID from the database
-//       const meja = await transaksiModel.findOne({
-//         where: { id_transaksi: transaksiID },
-//       });
-//       mejaModel
-//         .update(
-//           { status: "tersedia" },
-//           { where: { id_meja: transaksiModel.id_meja } }
-//         )
-//         .then((result) => {
-//           return response.json({
-//             success: true,
-//             data: [],
-//             message: "sukses",
-//           });
-//         });
-//     });
-// };
-
 exports.createPayment = async (request, response) => {
-  let transaksiID = request.params.id;
-
-  let mejaID = transaksi.id_meja;
+  const params = {
+    id_transaksi: request.params.id_transaksi,
+  };
+  const transaksinya = await transaksiModel.findOne({ attributes: ["id_meja"], where : params });
+  let mejaID = transaksinya.id_meja;
+  console.log("Ini Error apa", mejaID);
   mejaModel
     .update({ status: "tersedia" }, { where: { id_meja: mejaID } })
     .then(async (result) => {
       transaksiModel
-        .update({ status: "lunas" }, { where: { id_transaksi: transaksiID } })
+        .update({ status: "lunas" }, { where: params })
         .then((result) => {
           return response.json({
             success: true,
@@ -189,4 +168,25 @@ exports.createPayment = async (request, response) => {
         message: error.message,
       });
     });
+};
+
+exports.findOneTransaksi = async (req, res) => {
+  try {
+    const params = {
+      id_transaksi: req.params.id_transaksi,
+    };
+
+    const result = await transaksiModel.findOne({ attributes: ["id_meja"], where : params });
+    return res.json({
+      success: true,
+      data: result,
+      code: 200,
+    });
+  } catch (err) {
+    console.log(err);
+    return res.json({
+      success: false,
+      code: 500,
+    });
+  }
 };

@@ -12,11 +12,11 @@ const userController = require("../controllers/user.controller");
 const verify = require("../middleware/auth");
 
 app.get("/", verify.verifyToken, userController.getAllUser);
-app.get("/:id_user", verify.verifyToken, userController.getOneUser);
+app.get("/:id_user", userController.getOneUser);
 app.post("/add", userController.addUser);
 app.post("/find", userController.searchUser);
 app.put("/:id_user", verify.verifyToken, userController.updateUser);
-app.delete("/:id_user", verify.verifyToken, userController.deleteUser);
+app.delete("/:id_user" , verify.verifyToken, userController.deleteUser);
 
 // export app in order to load in another file
 module.exports = app;

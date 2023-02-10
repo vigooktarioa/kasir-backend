@@ -1,5 +1,6 @@
 // load model for user table
 const userModel = require("../models/index").user;
+const user = require("../models/user");
 const argon2 = require("argon2");
 
 // load operation from Sequelize
@@ -22,7 +23,7 @@ exports.getAllUser = async (request, response) => {
 
 exports.getOneUser = async (request, response) => {
   try {
-    let user = await userModel.findAll({
+    let user = await userModel.findOne({
       where: {
         id_user: request.params.id_user,
       },
