@@ -1,6 +1,6 @@
-const userModel = require('../models/index').user
-const argon2 = require('argon2');
-const jwt = require('jsonwebtoken');
+const userModel = require("../models/index").user;
+const argon2 = require("argon2");
+const jwt = require("jsonwebtoken");
 
 exports.login = async(req, res) => {
 
@@ -64,9 +64,8 @@ exports.login = async(req, res) => {
 }
 
 exports.logout = async (request, response) => {
-    const refreshToken = request.cookies.refreshToken;
-    if(!refreshToken) return response.sendStatus(204);
-
+  const refreshToken = request.cookies.refreshToken;
+  if (!refreshToken) return response.sendStatus(204);
     const user = await userModel.findOne({
         where:{
             refresh_token: refreshToken
@@ -84,5 +83,4 @@ exports.logout = async (request, response) => {
         'message': 'Logout'
     })
 }
-
 

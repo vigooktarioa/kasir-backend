@@ -1,7 +1,5 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+"use strict";
+const { Model, Sequelize } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class detail_transaksi extends Model {
     /**
@@ -11,29 +9,43 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      this.belongsTo(models.transaksi, {
-        foreignKey: "id_transaksi",
-        as: "transaksi"
-      })
-
-      this.belongsTo(models.menu, {
-        foreignKey: "id_menu",
-        as: "menu"
-      })
+      this.belongsTo(models.transaksi);
+      this.belongsTo(models.menu);
     }
   }
-  detail_transaksi.init({
-    id_detail_transaksi:{
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-      autoIncrement: true
+  detail_transaksi.init(
+    {
+      id_detail_transaksi: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+      },
+      id_transaksi: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: "transaksi",
+          key: "id_transaksi",
+        },
+      },
+      id_menu: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: "menu",
+          key: "id_menu",
+        },
+      },
+      harga: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
     },
-    id_transaksi: DataTypes.INTEGER,
-    id_menu: DataTypes.INTEGER,
-    harga: DataTypes.INTEGER
-  }, {
-    sequelize,
-    modelName: 'detail_transaksi',
-  });
+    {
+      sequelize,
+      modelName: "detail_transaksi",
+      freezeTableName: true,
+    }
+  );
   return detail_transaksi;
 };

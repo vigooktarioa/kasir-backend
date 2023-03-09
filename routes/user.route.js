@@ -1,11 +1,11 @@
 // load library express
-const express = require('express')
+const express = require("express");
 
 // initiate object that instance of express
-const app = express()
+const app = express();
 
 // allow to read 'request with json type
-app.use(express.json())
+app.use(express.json());
 
 // load user's controller
 const userController = require('../controllers/user.controller')
@@ -20,4 +20,4 @@ app.put("/:id_user",verify.verifyJwt, userController.updateUser)
 app.delete("/:id_user",verify.verifyJwt, userController.deleteUser)
 
 // export app in order to load in another file
-module.exports = app
+module.exports = app;
